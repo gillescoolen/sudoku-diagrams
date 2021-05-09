@@ -1,0 +1,47 @@
+@startuml sudoku
+abstract Controller {
+  # Game: Game
+  {abstract} Update()
+}
+
+abstract View {
+  - _Inputs: Input[]
+  + Inputs: IEnumerable<Input>
+  {abstract} Render()
+}
+
+class GameController {
+  - Game: Game
+  - view: View
+  + GetCells(): Integer
+  + ChangeCell(cell: Cell)
+  + ChangeState()
+}
+class GameView {
+  + ChangeCell(cell: Cell)
+  + ChangeState()
+  - Render(cells: Cell[])
+}
+
+class StartController {
+  - view: View
+  + Start()
+}
+
+class StartView {}
+
+class Input {
+  - Key: Integer
+  - Action: Action
+}
+
+GameView --|> View
+StartView --|> View
+
+StartController --|> Controller
+GameController --|> Controller
+
+GameView --- Character
+
+View --- Input
+@enduml

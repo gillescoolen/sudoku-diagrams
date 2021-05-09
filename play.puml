@@ -1,0 +1,40 @@
+@startuml sequence
+actor User
+participant View
+participant Controller
+participant Game
+participant Cell
+
+User->View : Enters value 7 in cell
+View->Controller : Calls ChangeCell()
+  Controller->Game : Calls ChangeCell()
+
+alt value is empty
+  Game->Cell : Sets the definitive value of the cell to 7.
+else value is equal
+  Game->Cell : Empties the cell.
+else value is different
+  Game->Cell : Sets the definitive value of the cell to 7.
+end
+
+View<--Controller : Render new value
+
+User->View : Changes state
+View->Controller : Calls ChangeState()
+Controller->Game : Changes state to hint state
+View<--Controller : Render hint values
+
+User->View : Enters value 5 in cell
+View->Controller : Calls ChangeCell()
+  Controller->Game : Calls ChangeCell()
+
+alt hint is set
+  Game->Cell : Empties the cell.
+else hint is not set
+  Game->Cell : Sets the hint value of the cell to 5.
+else definitive is set
+end
+
+View<--Controller : Render new value
+
+@enduml

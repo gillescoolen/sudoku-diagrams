@@ -1,0 +1,116 @@
+@startuml sudoku
+
+' State Pattern '
+abstract State {
+    - game: Game
+    + GetValue(): Integer
+    + SetValue(value: Integer)
+}
+
+class DefinitiveState {
+  + GetValue(): Integer
+  + SetValue(value: Integer)
+}
+
+class HintState {
+  + GetValue(): Integer
+  + SetValue(value: Integer)
+}
+
+' Visitor Pattern '
+interface Visitor {
+  + visitCell()
+}
+
+class ValidateVisitor {
+  + visitCell()
+}
+
+class Game {
+  - state: State
+  - type: String
+  - cells: Cell[]
+  + ChangeState()
+  + UpdateCell(position: Position)
+  + Solve()
+}
+
+class Cell {
+  - definitiveValue: Integer
+  - hintValue: Integer
+  - position: Position
+  + IsValid(): Boolean
+  + GetValue(): Integer
+  + SetValue(value: Integer)
+}
+
+class Position {
+  - x: Integer
+  - y: Integer
+  - boxIndex: Integer
+}
+
+' Factory and Factory Pattern '
+interface SudokuFactory {
+  + CreateCells()
+  + GetResult(): Game
+}
+
+class SamuraiSudokuFactory {
+  + CreateCells()
+  + GetResult(): Game
+}
+
+class JigsawSudokuFactory {
+  + CreateCells()
+  + GetResult(): Game
+}
+
+class NormalSudokuFactory {
+  + CreateCells()
+  + GetResult(): Game
+}
+
+interface SudokuParser {
+  + Read(path: String): Cell[]
+}
+
+class SamuraiSudokuParser {
+  + Read(path: String): Cell[]
+}
+
+class JigsawSudokuParser {
+  + Read(path: String): Cell[]
+}
+
+class NormalSudokuParser {
+  + Read(path: String): Cell[]
+}
+
+class SudokuReader {
+  - parser: SudokuParser
+  - factory: SudokuFactory
+  - Start(type: string)
+}
+
+' Relations '
+HintState --|> State
+DefinitiveState --|> State
+
+ValidateVisitor --|> Visitor
+
+Game *-- Cell
+Cell --- Position
+
+SamuraiSudokuFactory --|> SudokuFactory
+JigsawSudokuFactory --|> SudokuFactory
+NormalSudokuFactory --|> SudokuFactory
+
+SamuraiSudokuParser --|> SudokuParser
+JigsawSudokuParser --|> SudokuParser
+NormalSudokuParser --|> SudokuParser
+
+SudokuReader --- SudokuParser
+SudokuReader --- SudokuFactory
+
+@enduml

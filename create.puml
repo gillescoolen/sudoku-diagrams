@@ -1,0 +1,14 @@
+@startuml sequence
+participant Controller
+participant SudokuReader
+participant SudokuParser
+participant SudokuFactory
+participant Game
+
+Controller->SudokuReader : Start(type)
+SudokuReader->SudokuParser : Read cells from corresponding file
+SudokuReader<--SudokuParser : Return parsed cells
+SudokuReader->SudokuFactory : Create game
+SudokuFactory->Game : Created game
+
+@enduml
